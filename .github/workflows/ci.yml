@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: |
+          docker build -t infra-toolkit:test .
+
+      - name: Run tests in container
+        run: |
+          docker run --rm infra-toolkit:test bash /tests/test_tools.sh
