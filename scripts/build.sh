@@ -5,8 +5,7 @@ IMAGE_NAME="docker.io/johe37/k8s-toolbox:latest"
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.30.5}"
 
 # Detect host architecture
-# ARCH=$(uname -m)
-ARCH=linux/amd64
+ARCH=$(uname -m)
 
 case "$ARCH" in
   x86_64)
@@ -29,9 +28,15 @@ echo " Target platform: $PLATFORM"
 echo " kubectl version: $KUBECTL_VERSION"
 echo "======================================"
 
+case "$ARCH" in
+  x86_64) TARGETARCH="amd64" ;;
+  arm64|aarch64) TARGETARCH="arm64" ;;
+esac
+
 docker build \
   --platform "$PLATFORM" \
   --build-arg KUBECTL_VERSION="$KUBECTL_VERSION" \
+  --build-arg TARGETARCH="$TARGETARCH" \
   -t "$IMAGE_NAME" \
   .
 

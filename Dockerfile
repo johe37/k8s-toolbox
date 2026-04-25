@@ -35,15 +35,17 @@ RUN helm plugin install https://github.com/jkroepke/helm-secrets || true
 # ----------------------------
 # helmfile (prebuilt binary)
 # ----------------------------
-RUN curl -Lo /usr/local/bin/helmfile \
-    https://github.com/helmfile/helmfile/releases/latest/download/helmfile_linux_amd64 \
-    && chmod +x /usr/local/bin/helmfile
+RUN curl -Lo helmfile.tar.gz \
+    https://github.com/helmfile/helmfile/releases/download/v1.4.4/helmfile_1.4.4_linux_${TARGETARCH}.tar.gz \
+    && tar -xzf helmfile.tar.gz \
+    && mv helmfile /usr/local/bin/helmfile \
+    && rm -f helmfile.tar.gz
 
 # ----------------------------
 # sops (PLATFORM AWARE)
 # ----------------------------
 RUN curl -Lo /usr/local/bin/sops \
-    https://github.com/getsops/sops/releases/latest/download/sops-v3.9.0.linux.${TARGETARCH} \
+    https://github.com/getsops/sops/releases/download/v3.12.2/sops-v3.12.2.linux.${TARGETARCH} \
     && chmod +x /usr/local/bin/sops
 
 # ----------------------------
